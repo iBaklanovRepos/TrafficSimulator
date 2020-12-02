@@ -7,19 +7,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a458088-2fe4-493a-922d-ff80958c6c23" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/META-INF/Traffic simulator.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$10.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$7.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$15.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$16.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$16.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$17.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$17.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$18.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$18.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$19.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$19.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$20.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$20.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$RoundedBorder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$RoundedBorder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/trafficsimulator/TrafficSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/TrafficSimulator.java" afterDir="false" />
@@ -102,7 +96,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

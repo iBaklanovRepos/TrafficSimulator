@@ -865,45 +865,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         bodyLabel.setFont(H2);
         content.add(bodyLabel, constraints);
 
-        JLabel bodyLabelLeftBorder = new JLabel("Левая граница");
-        bodyLabelLeftBorder.setFont(H2);
-        constraints.gridy = 1;
-        constraints.insets = new Insets(70, 0, 0, 300);
-        content.add(bodyLabelLeftBorder, constraints);
-
-        constraints.insets = new Insets(50, 0, 0, 300);
-        constraints.gridy = 3;
-
-        final JSlider sliderLeftBorder = new JSlider(JSlider.HORIZONTAL, 1, 19, 7);
-        final JTextField textFieldLeftBorder = new JTextField();
-        sliderLeftBorder.setPreferredSize(new Dimension(300,50));
-        sliderLeftBorder.setBackground(BACKGROUND_COL);
-        sliderLeftBorder.setMajorTickSpacing(1);
-        sliderLeftBorder.setPaintTicks(true);
-        sliderLeftBorder.setPaintLabels(true);
-        sliderLeftBorder.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider) e.getSource();
-                textFieldLeftBorder.setText(source.getValue() + "\nсекунд");
-                leftBorder = source.getValue();
-            }
-        });
-
-        content.add(sliderLeftBorder, constraints);
-
-        constraints.insets = new Insets(20, 0, 0, 300);
-
-        constraints.gridy = 4;
-
-        textFieldLeftBorder.setText(sliderLeftBorder.getValue() + "\nсекунд");
-        textFieldLeftBorder.setEditable(false);
-        textFieldLeftBorder.setPreferredSize(new Dimension(140,30));
-        textFieldLeftBorder.setHorizontalAlignment(SwingConstants.CENTER);
-        textFieldLeftBorder.setFont(H2);
-        textFieldLeftBorder.setBackground(BTN_COL);
-
-        content.add(textFieldLeftBorder, constraints);
 
         JLabel bodyLabelRightBorder = new JLabel("Правая граница");
         bodyLabelRightBorder.setFont(H2);
@@ -914,7 +875,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.insets = new Insets(50, 520, 0, 0);
         constraints.gridy = 3;
 
-        final JSlider sliderRightBorder = new JSlider(JSlider.HORIZONTAL, 2, 20, 10);
+        final JSlider sliderRightBorder = new JSlider(JSlider.HORIZONTAL, 2, 20, 7);
         final JTextField textFieldRightBorder = new JTextField();
         sliderRightBorder.setPreferredSize(new Dimension(300,50));
         sliderRightBorder.setBackground(BACKGROUND_COL);
@@ -945,6 +906,47 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         content.add(textFieldRightBorder, constraints);
 
+        JLabel bodyLabelLeftBorder = new JLabel("Левая граница");
+        bodyLabelLeftBorder.setFont(H2);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(70, 0, 0, 300);
+        content.add(bodyLabelLeftBorder, constraints);
+
+        constraints.insets = new Insets(50, 0, 0, 300);
+        constraints.gridy = 3;
+
+        final JSlider sliderLeftBorder = new JSlider(JSlider.HORIZONTAL, 1, 19, 7);
+        final JTextField textFieldLeftBorder = new JTextField();
+        sliderLeftBorder.setPreferredSize(new Dimension(300,50));
+        sliderLeftBorder.setBackground(BACKGROUND_COL);
+        sliderLeftBorder.setMajorTickSpacing(1);
+        sliderLeftBorder.setPaintTicks(true);
+        sliderLeftBorder.setPaintLabels(true);
+        sliderLeftBorder.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                sliderRightBorder.setValue(source.getValue());
+                textFieldLeftBorder.setText(source.getValue() + "\nсекунд");
+                leftBorder = source.getValue();
+            }
+        });
+
+        content.add(sliderLeftBorder, constraints);
+
+        constraints.insets = new Insets(20, 0, 0, 300);
+
+        constraints.gridy = 4;
+
+        textFieldLeftBorder.setText(sliderLeftBorder.getValue() + "\nсекунд");
+        textFieldLeftBorder.setEditable(false);
+        textFieldLeftBorder.setPreferredSize(new Dimension(140,30));
+        textFieldLeftBorder.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldLeftBorder.setFont(H2);
+        textFieldLeftBorder.setBackground(BTN_COL);
+
+        content.add(textFieldLeftBorder, constraints);
+
         final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
         final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
 
@@ -954,6 +956,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
                     if(roadMode.equals("tunnel")) {////////////////////////////////////////////////////////////////////////////
+
                         initHighwayFrame();////////////////////////////////////////////////////////////////////////////
                     }else{
                         initTunnelFrame();////////////////////////////////////////////////////////////////////////////
