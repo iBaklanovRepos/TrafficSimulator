@@ -48,12 +48,18 @@ public class TrafficSimulator implements ActionListener, Runnable {
     public static int determInterval = 10;
     private static int trafficLightPhase = 5000;
     public static String randomType = "normal";
+    public static String randomTypeSpeed = "normal";
     public static int mo = 10;
+    public static int  moSpeed = 10;
     public static int d = 10;
+    public static int dSpeed = 10;
     public static int leftBorder = 1;
+    public static int leftBorderSpeed = 1;
     public static int rightBorder = 2;
+    public static int rightBorderSpeed = 2;
     public static double intensity = 1;
     public static int tempIntensity = 1;
+    public static int tempIntensitySpeed = 1;
     public static Highway highway;
     public static Tunnel tunnel;
 
@@ -120,7 +126,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
                     roadMode = "tunnel";
                     frame.remove(content);
                     frame.repaint();
-                    initRandomTrafficSettingsFrame();
+                    initTrafficTypeFrame();
 
                 }else if(button.equals(highway)){
                     roadMode = "highway";
@@ -348,9 +354,9 @@ public class TrafficSimulator implements ActionListener, Runnable {
         frame.repaint();
     }
 
-    private void initTrafficTypeFrame(){
-        final Container content = new Container();
-        content.setLayout(new GridBagLayout());
+        private void initTrafficTypeFrame(){
+            final Container content = new Container();
+            content.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.NONE;
@@ -522,18 +528,13 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    if(roadMode.equals("highway")) {
-                        initHighwayFrame();
-                    }else{
-                        initTunnelFrame();
-                    }
+                        initSpeedRandomTrafficSettingsFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
                     initTrafficTypeFrame();
                 }
             }
         };
-
 
         nextFrame.setBorder(null);
         nextFrame.setBackground(BACKGROUND_COL);
@@ -568,7 +569,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.NONE;
-        constraints.insets = new Insets(0, 80, 30, 0);
+        constraints.insets = new Insets(50, 80, 10, 0);
 
         constraints.gridy = 0;
         constraints.gridx = 0;
@@ -578,6 +579,10 @@ public class TrafficSimulator implements ActionListener, Runnable {
         headLabel.setFont(H1);
 
         content.add(headLabel, constraints);
+        JLabel speedLabel = new JLabel("Настройки генерации потока автомобилей");
+        speedLabel.setFont(H1);
+        constraints.insets = new Insets(0, 80, 100, 0);
+        content.add(speedLabel, constraints);
 
         ButtonGroup buttonGroupCenter = new ButtonGroup();
         final JToggleButton button1 = new JToggleButton("Нормальный");
@@ -652,7 +657,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
                     }
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initHighwaySettingsFrame();
+                    initStartFrame();
                 }
             }
         };
@@ -722,9 +727,9 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         final JSlider sliderM = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
         final JTextField textFieldMo = new JTextField();
-        sliderM.setPreferredSize(new Dimension(300,50));
+        sliderM.setPreferredSize(new Dimension(320,50));
         sliderM.setBackground(BACKGROUND_COL);
-        sliderM.setMajorTickSpacing(19);
+        sliderM.setMajorTickSpacing(30);
         sliderM.setPaintTicks(true);
         sliderM.setPaintLabels(true);
         sliderM.addChangeListener(new ChangeListener() {
@@ -762,9 +767,9 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         final JSlider sliderD = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
         final JTextField textFieldD = new JTextField();
-        sliderD.setPreferredSize(new Dimension(300,50));
+        sliderD.setPreferredSize(new Dimension(320,50));
         sliderD.setBackground(BACKGROUND_COL);
-        sliderD.setMajorTickSpacing(19);
+        sliderD.setMajorTickSpacing(30);
         sliderD.setPaintTicks(true);
         sliderD.setPaintLabels(true);
         sliderD.addChangeListener(new ChangeListener() {
@@ -799,14 +804,11 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    if(roadMode.equals("tunnel")) {////////////////////////////////////////////////////////////////////////////
-                        initHighwayFrame();////////////////////////////////////////////////////////////////////////////
-                    }else{
-                        initTunnelFrame();////////////////////////////////////////////////////////////////////////////
-                    }
-                }else if(e.getSource().equals(prevFrame)){////////////////////////////////////////////////////////////////////////////
-                    frame.remove(content);////////////////////////////////////////////////////////////////////////////
-                    initTrafficTypeFrame();////////////////////////////////////////////////////////////////////////////
+                        initSpeedRandomTrafficSettingsFrame();////////////////////////////////////////////////////////////////////////////
+
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
                 }
             }
         };
@@ -864,7 +866,28 @@ public class TrafficSimulator implements ActionListener, Runnable {
         JLabel bodyLabel = new JLabel("Задайте значение для левой и правой границы интервала");
         bodyLabel.setFont(H2);
         content.add(bodyLabel, constraints);
+        //______________________
 
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        final JLabel exceptionLabel = new JLabel("Правая граница интервала не может быть меньше или равно левой");
+        exceptionLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        exceptionLabel.setForeground(Color.RED);
+        exceptionLabel.setVisible(false);
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                        initSpeedRandomTrafficSettingsFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
+                }
+            }
+        };
 
         JLabel bodyLabelRightBorder = new JLabel("Правая граница");
         bodyLabelRightBorder.setFont(H2);
@@ -875,7 +898,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.insets = new Insets(50, 520, 0, 0);
         constraints.gridy = 3;
 
-        final JSlider sliderRightBorder = new JSlider(JSlider.HORIZONTAL, 2, 20, 7);
+        final JSlider sliderRightBorder = new JSlider(JSlider.HORIZONTAL, 2, 20, 2);
         final JTextField textFieldRightBorder = new JTextField();
         sliderRightBorder.setPreferredSize(new Dimension(300,50));
         sliderRightBorder.setBackground(BACKGROUND_COL);
@@ -888,6 +911,14 @@ public class TrafficSimulator implements ActionListener, Runnable {
                 JSlider sourceRight = (JSlider) e.getSource();
                 textFieldRightBorder.setText(sourceRight.getValue() + "\nсекунд");
                 rightBorder = sourceRight.getValue();
+                if (sourceRight.getValue() <= leftBorder){
+                    nextFrame.setEnabled(false);
+                    exceptionLabel.setVisible(true);
+                }
+                if (sourceRight.getValue() > leftBorder){
+                    nextFrame.setEnabled(true);
+                    exceptionLabel.setVisible(false);
+                }
             }
         });
 
@@ -915,7 +946,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.insets = new Insets(50, 0, 0, 300);
         constraints.gridy = 3;
 
-        final JSlider sliderLeftBorder = new JSlider(JSlider.HORIZONTAL, 1, 19, 7);
+        final JSlider sliderLeftBorder = new JSlider(JSlider.HORIZONTAL, 1, 19, 1);
         final JTextField textFieldLeftBorder = new JTextField();
         sliderLeftBorder.setPreferredSize(new Dimension(300,50));
         sliderLeftBorder.setBackground(BACKGROUND_COL);
@@ -926,7 +957,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
             @Override
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
-                sliderRightBorder.setValue(source.getValue());
+                sliderRightBorder.setValue(source.getValue()+1);
                 textFieldLeftBorder.setText(source.getValue() + "\nсекунд");
                 leftBorder = source.getValue();
             }
@@ -947,27 +978,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         content.add(textFieldLeftBorder, constraints);
 
-        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-
-        ActionListener footerButtonsListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource().equals(nextFrame)){
-                    frame.remove(content);
-                    if(roadMode.equals("tunnel")) {////////////////////////////////////////////////////////////////////////////
-
-                        initHighwayFrame();////////////////////////////////////////////////////////////////////////////
-                    }else{
-                        initTunnelFrame();////////////////////////////////////////////////////////////////////////////
-                    }
-                }else if(e.getSource().equals(prevFrame)){////////////////////////////////////////////////////////////////////////////
-                    frame.remove(content);////////////////////////////////////////////////////////////////////////////
-                    initTrafficTypeFrame();////////////////////////////////////////////////////////////////////////////
-                }
-            }
-        };
-
         nextFrame.setBorder(null);
         nextFrame.setBackground(BACKGROUND_COL);
         nextFrame.addActionListener(footerButtonsListener);
@@ -985,6 +995,11 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.gridx = 1;
         constraints.insets = new Insets(320,100,0,0);
         content.add(nextFrame, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(200, 150, 0, 0);
+        content.add(exceptionLabel, constraints);
 
         frame.add(content);
         frame.setVisible(true);
@@ -1012,7 +1027,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         content.add(headLabel, constraints);
 
-
         constraints.insets = new Insets(0, 150, 30, 0);
 
         constraints.gridy = 1;
@@ -1026,10 +1040,8 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         constraints.gridy = 2;
 
-       // final JSlider slider = new JSlider(JSlider.HORIZONTAL, 0.01, 0.1, 10);
-        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 0, 10, 0);
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
         Hashtable labelTable = new Hashtable();
-        labelTable.put( 0, new JLabel("0.0") );
         labelTable.put( 1, new JLabel("0.01") );
         labelTable.put(2, new JLabel("0.02") );
         labelTable.put(3, new JLabel("0.03") );
@@ -1092,14 +1104,576 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    if(roadMode.equals("highway")) {
-                        initHighwayFrame();
-                    }else{
-                        initTunnelFrame();
+                        initSpeedRandomTrafficSettingsFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(320,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(320,100,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
+
+    private void initSpeedRandomTrafficSettingsFrame() {
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(50, 80, 10, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 2;
+
+        JLabel headLabel = new JLabel("Выберите закон распределения случайной величины");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+        JLabel speedLabel = new JLabel("Настройки генерации значения скорости");
+        speedLabel.setFont(H1);
+        constraints.insets = new Insets(0, 80, 100, 0);
+        content.add(speedLabel, constraints);
+
+        ButtonGroup buttonGroupCenter = new ButtonGroup();
+        final JToggleButton button1 = new JToggleButton("Нормальный");
+        final JToggleButton button2 = new JToggleButton("Равномерный");
+        final JToggleButton button3 = new JToggleButton("Показательный");
+
+        ActionListener centerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(button1)){
+                    randomTypeSpeed = "normal";
+                }
+                if(e.getSource().equals(button2)){
+                    randomTypeSpeed = "uniform";
+                }
+                if(e.getSource().equals(button3)){
+                    randomTypeSpeed = "exponential";
+                }
+            }
+        };
+
+        button1.setBorder(null);
+        button1.setFont(H2);
+        button1.setPreferredSize(new Dimension(300,45));
+        button1.setBackground(BTN_COL);
+        button1.setSelected(true);
+        button1.addActionListener(centerButtonsListener);
+
+        button2.setBorder(null);
+        button2.setFont(H2);
+        button2.setPreferredSize(new Dimension(300,45));
+        button2.setBackground(BTN_COL);
+        button2.addActionListener(centerButtonsListener);
+
+        button3.setBorder(null);
+        button3.setFont(H2);
+        button3.setPreferredSize(new Dimension(300,45));
+        button3.setBackground(BTN_COL);
+        button3.addActionListener(centerButtonsListener);
+
+        buttonGroupCenter.add(button1);
+        buttonGroupCenter.add(button2);
+        buttonGroupCenter.add(button3);
+        constraints.gridy = 3;
+        constraints.insets = new Insets(0,0,0,600);
+
+        content.add(button1, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(0,25,0,0);
+        content.add(button2, constraints);
+
+        constraints.gridx = 0;
+        constraints.insets = new Insets(0,650,0,0);
+        content.add(button3, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    if(randomTypeSpeed.equals("normal")){
+                        initSpeedNormalDistributionFrame();
+                    }else if(randomTypeSpeed.equals("uniform")){
+                        initSpeedUniformDistributionFrame();
+                    }
+                    else if(randomTypeSpeed.equals("exponential")){
+                        initSpeedExponentialDistributionFrame();
                     }
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initTrafficTypeFrame();
+                    initSpeedRandomTrafficSettingsFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.insets = new Insets(350,0,0,800);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(350,900,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
+
+    private void initSpeedNormalDistributionFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Нормальный");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 1;
+
+        JLabel bodyLabel = new JLabel("Задайте параметры математического ожидания и дисперсии");
+        bodyLabel.setFont(H2);
+
+        content.add(bodyLabel, constraints);
+
+        JLabel bodyLabelM = new JLabel("Мат. ожидание");
+        bodyLabelM.setFont(H2);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(70, 0, 0, 300);
+        content.add(bodyLabelM, constraints);
+
+        constraints.insets = new Insets(50, 0, 0, 300);
+        constraints.gridy = 3;
+
+        final JSlider sliderM = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
+        final JTextField textFieldMo = new JTextField();
+        sliderM.setPreferredSize(new Dimension(320,50));
+        sliderM.setBackground(BACKGROUND_COL);
+        sliderM.setMajorTickSpacing(30);
+        sliderM.setPaintTicks(true);
+        sliderM.setPaintLabels(true);
+        sliderM.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                textFieldMo.setText(source.getValue() + "\n");
+                moSpeed = source.getValue();
+            }
+        });
+
+        content.add(sliderM, constraints);
+
+        constraints.insets = new Insets(20, 0, 0, 300);
+
+        constraints.gridy = 4;
+
+        textFieldMo.setText(sliderM.getValue() + "\n");
+        textFieldMo.setEditable(false);
+        textFieldMo.setPreferredSize(new Dimension(70,30));
+        textFieldMo.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldMo.setFont(H2);
+        textFieldMo.setBackground(BTN_COL);
+
+        content.add(textFieldMo, constraints);
+
+        JLabel bodyLabelD = new JLabel("Дисперсия");
+        bodyLabelD.setFont(H2);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(70, 500, 0, 0);
+        content.add(bodyLabelD, constraints);
+
+        constraints.insets = new Insets(50, 520, 0, 0);
+        constraints.gridy = 3;
+
+        final JSlider sliderD = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
+        final JTextField textFieldD = new JTextField();
+        sliderD.setPreferredSize(new Dimension(320,50));
+        sliderD.setBackground(BACKGROUND_COL);
+        sliderD.setMajorTickSpacing(30);
+        sliderD.setPaintTicks(true);
+        sliderD.setPaintLabels(true);
+        sliderD.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                textFieldD.setText(source.getValue() + "\n");
+                dSpeed = source.getValue();
+            }
+        });
+
+        content.add(sliderD, constraints);
+
+        constraints.insets = new Insets(20, 500, 0, 0);
+
+        constraints.gridy = 4;
+
+        textFieldD.setText(sliderD.getValue() + "\n");
+        textFieldD.setEditable(false);
+        textFieldD.setPreferredSize(new Dimension(70,30));
+        textFieldD.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldD.setFont(H2);
+        textFieldD.setBackground(BTN_COL);
+
+        content.add(textFieldD, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    initSpeedRandomTrafficSettingsFrame();////////////////////////////////////////////////////////////////////////////
+
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(320,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(320,100,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
+
+    /**
+     * Настройка равномерного закона распределения (рис. 27)
+     * в переменную leftBorder записать левую границу, в переменную rightBorder правую границу
+     */
+    private void initSpeedUniformDistributionFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Равномерный");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 1;
+
+        JLabel bodyLabel = new JLabel("Задайте значение для левой и правой границы интервала");
+        bodyLabel.setFont(H2);
+        content.add(bodyLabel, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        final JLabel exceptionLabel = new JLabel("Правая граница интервала не может быть меньше или равно левой");
+        exceptionLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        exceptionLabel.setForeground(Color.RED);
+        exceptionLabel.setVisible(false);
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    initSpeedRandomTrafficSettingsFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
+                }
+            }
+        };
+
+        JLabel bodyLabelRightBorder = new JLabel("Правая граница");
+        bodyLabelRightBorder.setFont(H2);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(70, 500, 0, 0);
+        content.add(bodyLabelRightBorder, constraints);
+
+        constraints.insets = new Insets(50, 520, 0, 0);
+        constraints.gridy = 3;
+
+        final JSlider sliderRightBorder = new JSlider(JSlider.HORIZONTAL, 2, 20, 2);
+        final JTextField textFieldRightBorder = new JTextField();
+        sliderRightBorder.setPreferredSize(new Dimension(300,50));
+        sliderRightBorder.setBackground(BACKGROUND_COL);
+        sliderRightBorder.setMajorTickSpacing(1);
+        sliderRightBorder.setPaintTicks(true);
+        sliderRightBorder.setPaintLabels(true);
+        sliderRightBorder.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider sourceRight = (JSlider) e.getSource();
+                textFieldRightBorder.setText(sourceRight.getValue() + "\nсекунд");
+                rightBorderSpeed = sourceRight.getValue();
+                if (sourceRight.getValue() <= leftBorderSpeed){
+                    nextFrame.setEnabled(false);
+                    exceptionLabel.setVisible(true);
+                }
+                if (sourceRight.getValue() > leftBorderSpeed){
+                    nextFrame.setEnabled(true);
+                    exceptionLabel.setVisible(false);
+                }
+            }
+        });
+
+        content.add(sliderRightBorder, constraints);
+
+        constraints.insets = new Insets(20, 500, 0, 0);
+
+        constraints.gridy = 4;
+
+        textFieldRightBorder.setText(sliderRightBorder.getValue() + "\nсекунд");
+        textFieldRightBorder.setEditable(false);
+        textFieldRightBorder.setPreferredSize(new Dimension(140,30));
+        textFieldRightBorder.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldRightBorder.setFont(H2);
+        textFieldRightBorder.setBackground(BTN_COL);
+
+        content.add(textFieldRightBorder, constraints);
+
+        JLabel bodyLabelLeftBorder = new JLabel("Левая граница");
+        bodyLabelLeftBorder.setFont(H2);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(70, 0, 0, 300);
+        content.add(bodyLabelLeftBorder, constraints);
+
+        constraints.insets = new Insets(50, 0, 0, 300);
+        constraints.gridy = 3;
+
+        final JSlider sliderLeftBorder = new JSlider(JSlider.HORIZONTAL, 1, 19, 1);
+        final JTextField textFieldLeftBorder = new JTextField();
+        sliderLeftBorder.setPreferredSize(new Dimension(300,50));
+        sliderLeftBorder.setBackground(BACKGROUND_COL);
+        sliderLeftBorder.setMajorTickSpacing(1);
+        sliderLeftBorder.setPaintTicks(true);
+        sliderLeftBorder.setPaintLabels(true);
+        sliderLeftBorder.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                sliderRightBorder.setValue(source.getValue()+1);
+                textFieldLeftBorder.setText(source.getValue() + "\nсекунд");
+                leftBorderSpeed = source.getValue();
+            }
+        });
+
+        content.add(sliderLeftBorder, constraints);
+
+        constraints.insets = new Insets(20, 0, 0, 300);
+
+        constraints.gridy = 4;
+
+        textFieldLeftBorder.setText(sliderLeftBorder.getValue() + "\nсекунд");
+        textFieldLeftBorder.setEditable(false);
+        textFieldLeftBorder.setPreferredSize(new Dimension(140,30));
+        textFieldLeftBorder.setHorizontalAlignment(SwingConstants.CENTER);
+        textFieldLeftBorder.setFont(H2);
+        textFieldLeftBorder.setBackground(BTN_COL);
+
+        content.add(textFieldLeftBorder, constraints);
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(320,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(320,100,0,0);
+        content.add(nextFrame, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(200, 150, 0, 0);
+        content.add(exceptionLabel, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
+
+    /**
+     * Настройка показательного закона распределения (рис. 28)
+     * в переменную intensity записать интенсивность
+     */
+    private void initSpeedExponentialDistributionFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Показательный");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 1;
+
+        JLabel bodyLabel = new JLabel("Укажите значение интенсивности транспортного потока");
+        bodyLabel.setFont(H2);
+
+        content.add(bodyLabel, constraints);
+
+        constraints.insets = new Insets(50, 150, 0, 0);
+
+        constraints.gridy = 2;
+
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
+        Hashtable labelTable = new Hashtable();
+        labelTable.put( 1, new JLabel("0.01") );
+        labelTable.put(2, new JLabel("0.02") );
+        labelTable.put(3, new JLabel("0.03") );
+        labelTable.put(4, new JLabel("0.04") );
+        labelTable.put(5, new JLabel("0.05") );
+        labelTable.put(6, new JLabel("0.06") );
+        labelTable.put(7, new JLabel("0.07") );
+        labelTable.put(8, new JLabel("0.08") );
+        labelTable.put(9, new JLabel("0.09") );
+        labelTable.put(10, new JLabel("0.1") );
+        slider.setLabelTable(labelTable);
+        final JTextField textField = new JTextField();
+        slider.setPreferredSize(new Dimension(400,50));
+        slider.setBackground(BACKGROUND_COL);
+        slider.setMajorTickSpacing(19);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        final HashMap<Integer, Double> intensityHM = new HashMap<Integer, Double>();
+        intensityHM.put(1, 0.01);
+        intensityHM.put(2, 0.02);
+        intensityHM.put(3, 0.03);
+        intensityHM.put(4, 0.04);
+        intensityHM.put(5, 0.05);
+        intensityHM.put(6, 0.06);
+        intensityHM.put(7, 0.07);
+        intensityHM.put(8, 0.08);
+        intensityHM.put(9, 0.09);
+        intensityHM.put(10, 0.1);
+
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                tempIntensitySpeed = source.getValue();
+                Double intensity = intensityHM.get(tempIntensitySpeed);
+                textField.setText( intensity + "\nГц");
+            }
+        });
+
+        content.add(slider, constraints);
+        constraints.insets = new Insets(20, 150, 0, 0);
+        constraints.gridy = 3;
+
+
+        textField.setText("0,0" + slider.getValue() + "\nГц");
+        textField.setEditable(false);
+        textField.setPreferredSize(new Dimension(140,30));
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        textField.setFont(H2);
+        textField.setBackground(BTN_COL);
+
+        content.add(textField, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    initSpeedRandomTrafficSettingsFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initRandomTrafficSettingsFrame();
                 }
             }
         };
