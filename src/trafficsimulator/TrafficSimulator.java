@@ -59,6 +59,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
     public static int rightBorderSpeed = 2;
     public static double intensity = 1;
     public static int tempIntensity = 1;
+    public static int semaphore = 1;
     public static int tempIntensitySpeed = 1;
     public static Highway highway;
     public static Tunnel tunnel;
@@ -431,6 +432,127 @@ public class TrafficSimulator implements ActionListener, Runnable {
             }
         };
 
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.insets = new Insets(350,0,0,800);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(350,900,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
+
+    private void initSpeedRandomTrafficSettingsFrame() {
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(50, 80, 10, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 2;
+
+        JLabel headLabel = new JLabel("Выберите закон распределения случайной величины");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+        JLabel speedLabel = new JLabel("Настройки генерации значения скорости");
+        speedLabel.setFont(H1);
+        constraints.insets = new Insets(0, 80, 100, 0);
+        content.add(speedLabel, constraints);
+
+        ButtonGroup buttonGroupCenter = new ButtonGroup();
+        final JToggleButton button1 = new JToggleButton("Нормальный");
+        final JToggleButton button2 = new JToggleButton("Равномерный");
+        final JToggleButton button3 = new JToggleButton("Показательный");
+
+        ActionListener centerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(button1)){
+                    randomTypeSpeed = "normal";
+                }
+                if(e.getSource().equals(button2)){
+                    randomTypeSpeed = "uniform";
+                }
+                if(e.getSource().equals(button3)){
+                    randomTypeSpeed = "exponential";
+                }
+            }
+        };
+
+        button1.setBorder(null);
+        button1.setFont(H2);
+        button1.setPreferredSize(new Dimension(300,45));
+        button1.setBackground(BTN_COL);
+        button1.setSelected(true);
+        button1.addActionListener(centerButtonsListener);
+
+        button2.setBorder(null);
+        button2.setFont(H2);
+        button2.setPreferredSize(new Dimension(300,45));
+        button2.setBackground(BTN_COL);
+        button2.addActionListener(centerButtonsListener);
+
+        button3.setBorder(null);
+        button3.setFont(H2);
+        button3.setPreferredSize(new Dimension(300,45));
+        button3.setBackground(BTN_COL);
+        button3.addActionListener(centerButtonsListener);
+
+        buttonGroupCenter.add(button1);
+        buttonGroupCenter.add(button2);
+        buttonGroupCenter.add(button3);
+        constraints.gridy = 3;
+        constraints.insets = new Insets(0,0,0,600);
+
+        content.add(button1, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(0,25,0,0);
+        content.add(button2, constraints);
+
+        constraints.gridx = 0;
+        constraints.insets = new Insets(0,650,0,0);
+        content.add(button3, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    if(randomTypeSpeed.equals("normal")){
+                        initSpeedNormalDistributionFrame();
+                    }else if(randomTypeSpeed.equals("uniform")){
+                        initSpeedUniformDistributionFrame();
+                    }
+                    else if(randomTypeSpeed.equals("exponential")){
+                        initSpeedExponentialDistributionFrame();
+                    }
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initTrafficTypeFrame();
+                }
+            }
+        };
 
         nextFrame.setBorder(null);
         nextFrame.setBackground(BACKGROUND_COL);
@@ -450,12 +572,110 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.insets = new Insets(350,900,0,0);
         content.add(nextFrame, constraints);
 
-
-
         frame.add(content);
         frame.setVisible(true);
         frame.repaint();
     }
+
+    /*private void initSpeedTrafficTypeFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 80, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 2;
+
+        JLabel headLabel = new JLabel("Выберите тип генерации скорости");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+        ButtonGroup buttonGroupCenter = new ButtonGroup();
+        final JToggleButton button1 = new JToggleButton("Детерминированный");
+        final JToggleButton button2 = new JToggleButton("Случайный");
+
+        ActionListener centerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(button1)){
+                    trafficType = "determined";
+                }
+                if(e.getSource().equals(button2)){
+                    trafficType = "random";
+                }
+            }
+        };
+
+        button1.setBorder(null);
+        button1.setFont(H2);
+        button1.setPreferredSize(new Dimension(300,45));
+        button1.setBackground(BTN_COL);
+        button1.setSelected(true);
+        button1.addActionListener(centerButtonsListener);
+
+        button2.setBorder(null);
+        button2.setFont(H2);
+        button2.setPreferredSize(new Dimension(300,45));
+        button2.setBackground(BTN_COL);
+        button2.addActionListener(centerButtonsListener);
+
+        buttonGroupCenter.add(button1);
+        buttonGroupCenter.add(button2);
+        constraints.gridy = 2;
+        constraints.insets = new Insets(130,80,0,400);
+
+        content.add(button1, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(130,400,0,0);
+        content.add(button2, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    if(trafficType.equals("determined")){
+                        initDetermTrafficSettingsFrame();
+                    }else if(trafficType.equals("random")){
+                        initRandomTrafficSettingsFrame();
+                    }
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initHighwaySettingsFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.insets = new Insets(350,0,0,800);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(350,900,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }*/
 
     private void initDetermTrafficSettingsFrame(){
         final Container content = new Container();
@@ -528,7 +748,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                        initSpeedRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
                     initTrafficTypeFrame();
@@ -558,6 +778,108 @@ public class TrafficSimulator implements ActionListener, Runnable {
         frame.setVisible(true);
         frame.repaint();
     }
+
+    /*private void initSpeedDetermTrafficSettingsFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Детерминированный скорость");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 1;
+
+        JLabel bodyLabel = new JLabel("Интервал времени, через который будут появляться машины");
+        bodyLabel.setFont(H2);
+
+        content.add(bodyLabel, constraints);
+
+        constraints.insets = new Insets(50, 150, 0, 0);
+
+        constraints.gridy = 2;
+
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 20, 10);
+        final JTextField textField = new JTextField();
+        slider.setPreferredSize(new Dimension(400,50));
+        slider.setBackground(BACKGROUND_COL);
+        slider.setMajorTickSpacing(19);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                textField.setText(source.getValue() + "\nсекунд");
+                determInterval = source.getValue();
+            }
+        });
+
+        content.add(slider, constraints);
+
+        constraints.insets = new Insets(20, 150, 0, 0);
+
+        constraints.gridy = 3;
+
+
+        textField.setText(slider.getValue() + "\nсекунд");
+        textField.setEditable(false);
+        textField.setPreferredSize(new Dimension(140,30));
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        textField.setFont(H2);
+        textField.setBackground(BTN_COL);
+
+        content.add(textField, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    initSpeedTrafficTypeFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initTrafficTypeFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(320,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(320,100,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }*/
 
     /**
      * Выбор закона распределения (рис. 25)
@@ -706,7 +1028,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
 
         content.add(headLabel, constraints);
 
-
         constraints.insets = new Insets(0, 150, 30, 0);
 
         constraints.gridy = 1;
@@ -836,6 +1157,100 @@ public class TrafficSimulator implements ActionListener, Runnable {
         frame.repaint();
     }
 
+    private void initSemaphoreFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Укажите значение длительности светофорных фаз");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 1;
+
+        constraints.insets = new Insets(50, 150, 0, 0);
+
+        constraints.gridy = 2;
+
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL, 30, 99, 66);
+        final JTextField textField = new JTextField();
+        slider.setPreferredSize(new Dimension(400,50));
+        slider.setBackground(BACKGROUND_COL);
+        slider.setMajorTickSpacing(23);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider) e.getSource();
+                semaphore = source.getValue();
+                textField.setText( semaphore + "\nсекунд");
+            }
+        });
+
+        content.add(slider, constraints);
+        constraints.insets = new Insets(20, 150, 0, 0);
+        constraints.gridy = 3;
+
+
+        textField.setText(slider.getValue() + "\nсекунд");
+        textField.setEditable(false);
+        textField.setPreferredSize(new Dimension(140,30));
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        textField.setFont(H2);
+        textField.setBackground(BTN_COL);
+
+        content.add(textField, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(nextFrame)){
+                    frame.remove(content);
+                    initTunnelFrame();
+                }else if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initSpeedRandomTrafficSettingsFrame();
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.insets = new Insets(320,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(320,100,0,0);
+        content.add(nextFrame, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
+    }
 
     /**
      * Настройка равномерного закона распределения (рис. 27)
@@ -857,7 +1272,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         headLabel.setFont(H1);
 
         content.add(headLabel, constraints);
-
 
         constraints.insets = new Insets(0, 150, 30, 0);
 
@@ -1135,127 +1549,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         frame.repaint();
     }
 
-    private void initSpeedRandomTrafficSettingsFrame() {
-        final Container content = new Container();
-        content.setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor = GridBagConstraints.NORTH;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.insets = new Insets(50, 80, 10, 0);
-
-        constraints.gridy = 0;
-        constraints.gridx = 0;
-        constraints.gridwidth = 2;
-
-        JLabel headLabel = new JLabel("Выберите закон распределения случайной величины");
-        headLabel.setFont(H1);
-
-        content.add(headLabel, constraints);
-        JLabel speedLabel = new JLabel("Настройки генерации значения скорости");
-        speedLabel.setFont(H1);
-        constraints.insets = new Insets(0, 80, 100, 0);
-        content.add(speedLabel, constraints);
-
-        ButtonGroup buttonGroupCenter = new ButtonGroup();
-        final JToggleButton button1 = new JToggleButton("Нормальный");
-        final JToggleButton button2 = new JToggleButton("Равномерный");
-        final JToggleButton button3 = new JToggleButton("Показательный");
-
-        ActionListener centerButtonsListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource().equals(button1)){
-                    randomTypeSpeed = "normal";
-                }
-                if(e.getSource().equals(button2)){
-                    randomTypeSpeed = "uniform";
-                }
-                if(e.getSource().equals(button3)){
-                    randomTypeSpeed = "exponential";
-                }
-            }
-        };
-
-        button1.setBorder(null);
-        button1.setFont(H2);
-        button1.setPreferredSize(new Dimension(300,45));
-        button1.setBackground(BTN_COL);
-        button1.setSelected(true);
-        button1.addActionListener(centerButtonsListener);
-
-        button2.setBorder(null);
-        button2.setFont(H2);
-        button2.setPreferredSize(new Dimension(300,45));
-        button2.setBackground(BTN_COL);
-        button2.addActionListener(centerButtonsListener);
-
-        button3.setBorder(null);
-        button3.setFont(H2);
-        button3.setPreferredSize(new Dimension(300,45));
-        button3.setBackground(BTN_COL);
-        button3.addActionListener(centerButtonsListener);
-
-        buttonGroupCenter.add(button1);
-        buttonGroupCenter.add(button2);
-        buttonGroupCenter.add(button3);
-        constraints.gridy = 3;
-        constraints.insets = new Insets(0,0,0,600);
-
-        content.add(button1, constraints);
-
-        constraints.gridx = 1;
-        constraints.insets = new Insets(0,25,0,0);
-        content.add(button2, constraints);
-
-        constraints.gridx = 0;
-        constraints.insets = new Insets(0,650,0,0);
-        content.add(button3, constraints);
-
-        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../next.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-
-        ActionListener footerButtonsListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(e.getSource().equals(nextFrame)){
-                    frame.remove(content);
-                    if(randomTypeSpeed.equals("normal")){
-                        initSpeedNormalDistributionFrame();
-                    }else if(randomTypeSpeed.equals("uniform")){
-                        initSpeedUniformDistributionFrame();
-                    }
-                    else if(randomTypeSpeed.equals("exponential")){
-                        initSpeedExponentialDistributionFrame();
-                    }
-                }else if(e.getSource().equals(prevFrame)){
-                    frame.remove(content);
-                    initSpeedRandomTrafficSettingsFrame();
-                }
-            }
-        };
-
-        nextFrame.setBorder(null);
-        nextFrame.setBackground(BACKGROUND_COL);
-        nextFrame.addActionListener(footerButtonsListener);
-
-        prevFrame.setBorder(null);
-        prevFrame.setBackground(BACKGROUND_COL);
-        prevFrame.addActionListener(footerButtonsListener);
-
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.insets = new Insets(350,0,0,800);
-
-        content.add(prevFrame, constraints);
-
-        constraints.gridx = 1;
-        constraints.insets = new Insets(350,900,0,0);
-        content.add(nextFrame, constraints);
-
-        frame.add(content);
-        frame.setVisible(true);
-        frame.repaint();
-    }
 
     private void initSpeedNormalDistributionFrame(){
         final Container content = new Container();
@@ -1273,7 +1566,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         headLabel.setFont(H1);
 
         content.add(headLabel, constraints);
-
 
         constraints.insets = new Insets(0, 150, 30, 0);
 
@@ -1372,11 +1664,14 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    initSpeedRandomTrafficSettingsFrame();////////////////////////////////////////////////////////////////////////////
+                    if (roadMode == "tunnel"){
+                        initSemaphoreFrame();
+                    }
+                    else initHighwayFrame();////////////////////////////////////////////////////////////////////////////
 
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }
             }
         };
@@ -1447,10 +1742,13 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    initSpeedRandomTrafficSettingsFrame();
+                    if (roadMode == "tunnel"){
+                        initSemaphoreFrame();
+                    }
+                    else initHighwayFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }
             }
         };
@@ -1670,10 +1968,13 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                    initSpeedRandomTrafficSettingsFrame();
+                    if (roadMode == "tunnel"){
+                        initSemaphoreFrame();
+                    }
+                    else initHighwayFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }
             }
         };
