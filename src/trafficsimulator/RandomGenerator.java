@@ -19,10 +19,25 @@ public class RandomGenerator implements Runnable{
     }
 
     public static int getRandomSpeed(){
-            return random.nextInt(10) + 1;
+        if(TrafficSimulator.randomTypeSpeed.equals("normal")){
+
+        }else if(TrafficSimulator.randomTypeSpeed.equals("exponential")){
+
+        }else if(TrafficSimulator.randomTypeSpeed.equals("uniform")){
+
+        }
+
+        return random.nextInt(5) + 4;
     }
 
     public static int getRandomTime(){
+        if(TrafficSimulator.randomType.equals("normal")){
+
+        }else if(TrafficSimulator.randomType.equals("exponential")){
+
+        }else if(TrafficSimulator.randomType.equals("uniform")){
+
+        }
         if(TrafficSimulator.trafficType.equals("determined")){
             return TrafficSimulator.determInterval * 1000;
         }else {
@@ -41,8 +56,11 @@ public class RandomGenerator implements Runnable{
                     e.printStackTrace();
                 }
             }else{
-                TrafficSimulator.tunnel.addVehicle(DirectionSwitcher.currentDirection, getRandomSpeed());
-                System.out.println(DirectionSwitcher.currentDirection);
+                if(DirectionSwitcher.currentDirection.equals("forward")) {
+                    TrafficSimulator.tunnel.addVehicle(true, getRandomSpeed());
+                }else if(DirectionSwitcher.currentDirection.equals("backward")){
+                    TrafficSimulator.tunnel.addVehicle(false, getRandomSpeed());
+                }
                 try {
                     Thread.sleep(getRandomTime());
                 } catch (Exception e) {

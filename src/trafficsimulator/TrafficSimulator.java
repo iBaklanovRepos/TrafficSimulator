@@ -9,6 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 
@@ -19,20 +25,20 @@ public class TrafficSimulator implements ActionListener, Runnable {
      */
     private static final Font H1 = new Font("Verdana", Font.PLAIN, 26);
     private static final Font H2 = new Font("Verdana", Font.PLAIN, 20);
+    private static final Font H3 = new Font("Verdana", Font.PLAIN, 12);
     private static final Color BACKGROUND_COL = new Color(189, 189, 189);
     private static final Color BTN_HOVER = new Color(210, 210, 210);;
     private static final Color BTN_COL = new Color(150, 150, 150);
-//    private static final Color BTN_SELECTED = new Color(146, 146, 146);
-//    private static final Color BACKGROUND_COL = new Color(224, 236, 236);
-//    private static final Color BTN_SELECTED = new Color(219, 253, 255);
 
     public static JFrame frame = new JFrame("Traffic Simulator");
 
 
 
-    private JButton startButton = new JButton("Start");
-    private JButton stopButton = new JButton("Stop");
-    private JSlider slider = new JSlider(JSlider.HORIZONTAL, 10, 70, 40);
+    private JButton startButton = new JButton("Начать");
+    private JButton stopButton = new JButton("Пауза");
+    private JButton restartButton = new JButton("В главное меню");
+    private JTextField timerTextField = new JTextField("00:00");
+    private JSlider slider = new JSlider(JSlider.HORIZONTAL, 40, 80, 60);
     private Container buttonContainer = new Container();
     private Container bottomContainer = new Container();
 
@@ -45,12 +51,12 @@ public class TrafficSimulator implements ActionListener, Runnable {
     private static int forwardLanes = 1;
     private static int backwardLanes = 1;
     public static String trafficType = "determined";
-    public static int determInterval = 10;
-    private static int trafficLightPhase = 5000;
+    public static int determInterval = 3;
+    private static int trafficLightPhase = 20000;
     public static String randomType = "normal";
     public static String randomTypeSpeed = "normal";
     public static int mo = 10;
-    public static int  moSpeed = 10;
+    public static int moSpeed = 10;
     public static int d = 10;
     public static int dSpeed = 10;
     public static int leftBorder = 1;
@@ -59,14 +65,24 @@ public class TrafficSimulator implements ActionListener, Runnable {
     public static int rightBorderSpeed = 2;
     public static double intensity = 1;
     public static int tempIntensity = 1;
-    public static int semaphore = 1;
     public static int tempIntensitySpeed = 1;
     public static Highway highway;
     public static Tunnel tunnel;
+    private String valueType = "generation";
 
     public TrafficSimulator() {
         setImages();
+        startButton.setBackground(BTN_COL);
+        startButton.setFont(H2);
+        stopButton.setBackground(BTN_COL);
+        stopButton.setFont(H2);
+        restartButton.setBackground(BTN_COL);
+        restartButton.setFont(H2);
+        timerTextField.setBackground(BTN_COL);
         initStartFrame();
+
+//        initHighwayFrame();
+//        roadMode = "tunnel";
 //        initTunnelFrame();
     }
 
@@ -104,7 +120,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         tunnel.setBackground(BACKGROUND_COL);
         tunnel.setBorder(null);
 
-
         content.add(tunnel, constraints);
 
         constraints.gridx = 1;
@@ -117,7 +132,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         highway.setFont(H2);
         highway.setBackground(BACKGROUND_COL);
         highway.setBorder(null);
-
 
         ActionListener choiceListener = new ActionListener() {
             @Override
@@ -135,7 +149,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
                     frame.repaint();
                     initHighwaySettingsFrame();
                 }
-
             }
         };
 
@@ -158,11 +171,154 @@ public class TrafficSimulator implements ActionListener, Runnable {
         highway.addMouseListener(adapter);
         tunnel.addMouseListener(adapter);
 
+        final JButton infoFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../info.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(infoFrame)){
+                    frame.remove(content);
+                    initInfoFrame();//
+                }
+            }
+        };
+
+        infoFrame.setBorder(null);
+        infoFrame.setBackground(BACKGROUND_COL);
+        infoFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(0,0,100,400);
+        content.add(infoFrame, constraints);
+
         frame.add(content);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.repaint();
+    }
 
+    private void initInfoFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(0, 150, 30, 0);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+
+        JLabel headLabel = new JLabel("Самарский университет");
+        headLabel.setFont(H1);
+
+        content.add(headLabel, constraints);
+
+        constraints.insets = new Insets(0, 150, 30, 0);
+        constraints.gridy = 1;
+
+        JLabel bodyLabel = new JLabel("Лабораторный практикум по дисциплине");
+        bodyLabel.setFont(H2);
+        content.add(bodyLabel, constraints);
+
+        constraints.insets = new Insets(50, 150, 0, 0);
+        JLabel subjectLabel = new JLabel("Технологии программирования");
+        subjectLabel.setFont(H2);
+        content.add(subjectLabel, constraints);
+
+        constraints.insets = new Insets(100, 150, 0, 0);
+        JLabel themeLabel = new JLabel("Тема: Система моделирования транспортного потока");
+        themeLabel.setFont(H2);
+        content.add(themeLabel, constraints);
+
+        constraints.insets = new Insets(180, 150, 0, 0);
+        JLabel developersLabel = new JLabel("Разработчики: студенты группы 6403-090301D");
+        developersLabel.setFont(H2);
+        content.add(developersLabel, constraints);
+
+        constraints.insets = new Insets(230, 150, 0, 0);
+        JLabel kalininLabel = new JLabel("Калинин А.А. Email: kalinin.alexandr99@mail.ru");
+        kalininLabel.setFont(H2);
+        content.add(kalininLabel, constraints);
+
+        constraints.insets = new Insets(260, 150, 0, 0);
+        JLabel baklanovLabel = new JLabel("Бакланов И.Д. Email: ibaklanov99@gmail.com");
+        baklanovLabel.setFont(H2);
+        content.add(baklanovLabel, constraints);
+
+        final JButton htmlButton = new JButton("Открыть руководство пользователя");
+
+        constraints.gridy = 1;
+        constraints.insets = new Insets(450, 150, 0, 0);
+        JLabel versionLabel = new JLabel("Версия 1.0");
+        versionLabel.setFont(H3);
+        content.add(versionLabel, constraints);
+
+        constraints.gridy = 1;
+        constraints.insets = new Insets(480, 150, 0, 0);
+        JLabel rootLabel = new JLabel("Все права защищены");
+        rootLabel.setFont(H3);
+        content.add(rootLabel, constraints);
+
+        constraints.gridy = 1;
+        constraints.insets = new Insets(500, 150, 0, 0);
+        JLabel samaraLabel = new JLabel("Самара 2020");
+        samaraLabel.setFont(H3);
+        content.add(samaraLabel, constraints);
+
+        final JButton nextFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../null.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+        final JButton prevFrame = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("../prev.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+
+        ActionListener footerButtonsListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(prevFrame)){
+                    frame.remove(content);
+                    initStartFrame();
+                }
+                else if(e.getSource().equals(htmlButton)){
+                    frame.remove(content);
+                    File f = new File("D:\\4 курс 1 семестр\\Технологии программирования\\Программа\\Traffic Sim\\TrafficSimulator\\images\\index.html");
+//                    System.out.println(getClass().getResource("../"));
+                    Desktop dt = Desktop.getDesktop();
+                    try {
+                        dt.open(f);
+                        initInfoFrame();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        nextFrame.setBorder(null);
+        nextFrame.setBackground(BACKGROUND_COL);
+        nextFrame.addActionListener(footerButtonsListener);
+
+        prevFrame.setBorder(null);
+        prevFrame.setBackground(BACKGROUND_COL);
+        prevFrame.addActionListener(footerButtonsListener);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(550,0,0,760);
+
+        content.add(prevFrame, constraints);
+
+        constraints.gridx = 1;
+        constraints.insets = new Insets(550,100,0,0);
+        content.add(nextFrame, constraints);
+
+        constraints.gridy = 1;
+        constraints.gridx = 0;
+        constraints.insets = new Insets(330, 150, 0, 0);
+        htmlButton.addActionListener(footerButtonsListener);
+        content.add(htmlButton, constraints);
+
+        frame.add(content);
+        frame.setVisible(true);
+        frame.repaint();
     }
 
     private void initHighwaySettingsFrame(){
@@ -197,8 +353,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         bodyLabel.setFont(H2);
 
         content.add(bodyLabel, constraints);
-
-
 
         ButtonGroup buttonGroupCenter = new ButtonGroup();
         final JToggleButton button1 = new JToggleButton("1");
@@ -328,7 +482,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
             }
         };
 
-
         nextFrame.setBorder(null);
         nextFrame.setBackground(BACKGROUND_COL);
         nextFrame.addActionListener(footerButtonsListener);
@@ -347,17 +500,14 @@ public class TrafficSimulator implements ActionListener, Runnable {
         constraints.insets = new Insets(130,900,0,0);
         content.add(nextFrame, constraints);
 
-
-
-
         frame.add(content);
         frame.setVisible(true);
         frame.repaint();
     }
 
-        private void initTrafficTypeFrame(){
-            final Container content = new Container();
-            content.setLayout(new GridBagLayout());
+    private void initTrafficTypeFrame(){
+        final Container content = new Container();
+        content.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.NORTH;
         constraints.fill = GridBagConstraints.NONE;
@@ -427,7 +577,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
                     }
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
-                    initHighwaySettingsFrame();
+                    initStartFrame();
                 }
             }
         };
@@ -1125,7 +1275,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                        initSpeedRandomTrafficSettingsFrame();////////////////////////////////////////////////////////////////////////////
+                    initSpeedRandomTrafficSettingsFrame();////////////////////////////////////////////////////////////////////////////
 
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
@@ -1194,8 +1344,8 @@ public class TrafficSimulator implements ActionListener, Runnable {
             @Override
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
-                semaphore = source.getValue();
-                textField.setText( semaphore + "\nсекунд");
+                trafficLightPhase = source.getValue()*1000;
+                textField.setText( source.getValue() + "\nсекунд");
             }
         });
 
@@ -1295,7 +1445,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                        initSpeedRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
                     initRandomTrafficSettingsFrame();
@@ -1518,7 +1668,7 @@ public class TrafficSimulator implements ActionListener, Runnable {
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(nextFrame)){
                     frame.remove(content);
-                        initSpeedRandomTrafficSettingsFrame();
+                    initSpeedRandomTrafficSettingsFrame();
                 }else if(e.getSource().equals(prevFrame)){
                     frame.remove(content);
                     initRandomTrafficSettingsFrame();
@@ -1719,7 +1869,6 @@ public class TrafficSimulator implements ActionListener, Runnable {
         headLabel.setFont(H1);
 
         content.add(headLabel, constraints);
-
 
         constraints.insets = new Insets(0, 150, 30, 0);
 
@@ -2008,27 +2157,74 @@ public class TrafficSimulator implements ActionListener, Runnable {
 //        frame.setSize(2560,600);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
+
+        Container mainContainer = new Container();
+        mainContainer.setLayout(new GridBagLayout());
+        GridBagConstraints mainConstrains = new GridBagConstraints();
+
+        mainConstrains.insets = new Insets(100,0,0,150);
+        mainConstrains.gridx = 0;
+        mainConstrains.gridx = 1;
+        mainConstrains.insets = new Insets(100,150,0,0);
+
+//        mainConstrains.gridy = 1;
+//        mainConstrains.gridx = 0;
+//        mainConstrains.gridwidth = 2;
+//        mainConstrains.insets = new Insets(50,0,900,0);
+//        mainContainer.add(tunnel, mainConstrains);
+
+        frame.add(mainContainer, BorderLayout.NORTH);
+
         frame.add(tunnel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         frame.setVisible(true);
 
-        bottomContainer.setLayout(new GridLayout(2,1));
-        buttonContainer.setLayout(new GridLayout(1,2));
-        bottomContainer.add(slider);
-        bottomContainer.add(buttonContainer);
-        buttonContainer.add(startButton);
-        buttonContainer.add(stopButton);
-        frame.add(bottomContainer, BorderLayout.SOUTH);
+
+
+
+
+
+
+
+        buttonContainer.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridy = 0;
+        constraints.gridwidth = 4;
+        constraints.insets = new Insets(20,0,50,100);
+        buttonContainer.add(slider,constraints);
+        constraints.gridwidth = 1;
+        constraints.gridy = 1;
+        constraints.insets = new Insets(20,0,35,100);
+        buttonContainer.add(startButton, constraints);
+        constraints.insets = new Insets(20,50,35,50);
+        buttonContainer.add(stopButton, constraints);
+        buttonContainer.add(restartButton, constraints);
+        constraints.insets = new Insets(20, 150, 35, 0);
+        timerTextField.setEditable(false);
+        timerTextField.setPreferredSize(new Dimension(70,30));
+        timerTextField.setFont(H2);
+        buttonContainer.add(timerTextField, constraints);
+
+        frame.add(buttonContainer, BorderLayout.SOUTH);
         startButton.addActionListener(this);
         stopButton.addActionListener(this);
+        restartButton.addActionListener(this);
+        slider.setMajorTickSpacing(10);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setSnapToTicks(true);
+        slider.setBackground(BACKGROUND_COL);
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
-                System.out.println(source.getValue());
+                tunnel.changeAllCarSpeed(source.getValue()/10);
+//                tunnel.changeHeadCarSpeed(source.getValue()/10);
             }
         });
         frame.repaint();
+        frame.setVisible(true);
     }
 
 
@@ -2045,12 +2241,23 @@ public class TrafficSimulator implements ActionListener, Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        buttonContainer.setLayout(new GridLayout(1,2));
-        buttonContainer.add(startButton);
-        buttonContainer.add(stopButton);
+
+        buttonContainer.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(0,0,15,100);
+        buttonContainer.add(startButton, constraints);
+        constraints.insets = new Insets(0,50,15,50);
+        buttonContainer.add(stopButton, constraints);
+        buttonContainer.add(restartButton, constraints);
+        constraints.insets = new Insets(0, 150, 15, 0);
+        timerTextField.setEditable(false);
+        timerTextField.setPreferredSize(new Dimension(70,30));
+        timerTextField.setFont(H2);
+        buttonContainer.add(timerTextField, constraints);
         frame.add(buttonContainer, BorderLayout.SOUTH);
         startButton.addActionListener(this);
         stopButton.addActionListener(this);
+        restartButton.addActionListener(this);
         frame.repaint();
     }
 
@@ -2082,12 +2289,22 @@ public class TrafficSimulator implements ActionListener, Runnable {
                 stepsThread.start();
                 Thread generationThread = new Thread(new RandomGenerator(trafficLightPhase, roadMode));
                 generationThread.start();
+                startTimer(timerTextField);
             }
         }
         if(e.getSource().equals(stopButton)){
             if(running){
                 running = false;
             }
+        }if(e.getSource().equals(restartButton)){
+            running = false;
+            if(roadMode.equals("highway")){
+                frame.remove(highway);
+            }if(roadMode.equals("tunnel")){
+                frame.remove(tunnel);
+            }
+            frame.remove(buttonContainer);
+            initStartFrame();
         }
     }
 
@@ -2106,6 +2323,35 @@ public class TrafficSimulator implements ActionListener, Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void startTimer(final JTextField textField){
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                while(running){
+                    String pattern = "mm:ss";
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                    String startTime = textField.getText();
+                    Calendar c = Calendar.getInstance();
+                    try {
+                        c.setTime(dateFormat.parse(startTime));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    c.add(Calendar.SECOND, 1);
+
+                    textField.setText(dateFormat.format(c.getTime()));
+                    try{
+                        Thread.sleep(1000);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        Thread thread = new Thread(r);
+        thread.start();
     }
 
     private static class RoundedBorder implements Border {

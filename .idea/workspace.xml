@@ -6,8 +6,67 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a458088-2fe4-493a-922d-ff80958c6c23" name="Default Changelist" comment="">
+    <list default="true" id="7a458088-2fe4-493a-922d-ff80958c6c23" name="Default Changelist" comment="Just forms">
+      <change afterPath="$PROJECT_DIR$/images/green-yellow.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/green.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/avtostrada.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/su.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/html_resourses/tunnel.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/info.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/null.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/red-yellow.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/red.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/green-yellow.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/green.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/avtostrada.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/su.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/html_resourses/tunnel.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/info.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/null.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/red-yellow.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/red.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$21.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$22.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$23.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$24.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$25.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$26.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$27.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$28.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$29.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$30.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$31.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$32.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$33.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$34.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$35.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/tunnel.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/images/tunnel.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/DirectionSwitcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/DirectionSwitcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/RandomGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/RandomGenerator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$10.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$11.class" afterDir="false" />
@@ -30,7 +89,14 @@
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$RoundedBorder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator$RoundedBorder.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/TrafficSimulator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/Tunnel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/Tunnel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/Vehicle.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/trafficsimulator/Vehicle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Traffic simulator/tunnel.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Traffic simulator/tunnel.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trafficsimulator/DirectionSwitcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/DirectionSwitcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trafficsimulator/RandomGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/RandomGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/trafficsimulator/TrafficSimulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/TrafficSimulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trafficsimulator/Tunnel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/Tunnel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/trafficsimulator/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/trafficsimulator/Vehicle.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,10 +119,14 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="SYNC" />
+    <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="ProjectId" id="1k8FV431KJYy2be6KeDr4WJxewB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/images" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
